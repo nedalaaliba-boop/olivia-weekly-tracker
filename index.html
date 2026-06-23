@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Job Search">
+<title>Weekly Job Search Tracker</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f9f8f6;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.10);
+    --border-md: rgba(0,0,0,0.18);
+    --text-primary: #1a1917;
+    --text-secondary: #6b6a67;
+    --text-tertiary: #9b9a97;
+    --purple-bg: #EEEDFE;
+    --purple-text: #3C3489;
+    --purple-mid: #534AB7;
+    --teal-bg: #E1F5EE;
+    --teal-text: #085041;
+    --teal-mid: #1D9E75;
+    --amber-bg: #FAEEDA;
+    --amber-text: #633806;
+    --amber-mid: #854F0B;
+    --blue-bg: #E6F1FB;
+    --blue-text: #0C447C;
+    --blue-mid: #185FA5;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1917;
+      --surface: #242321;
+      --border: rgba(255,255,255,0.10);
+      --border-md: rgba(255,255,255,0.18);
+      --text-primary: #f0ede8;
+      --text-secondary: #a8a5a0;
+      --text-tertiary: #6b6a67;
+      --purple-bg: #26215C;
+      --purple-text: #CECBF6;
+      --purple-mid: #AFA9EC;
+      --teal-bg: #04342C;
+      --teal-text: #9FE1CB;
+      --teal-mid: #5DCAA5;
+      --amber-bg: #412402;
+      --amber-text: #FAC775;
+      --amber-mid: #EF9F27;
+      --blue-bg: #042C53;
+      --blue-text: #B5D4F4;
+      --blue-mid: #85B7EB;
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0 0 3rem;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 0.5px solid var(--border);
+    padding: 1.25rem 1.25rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+
+  .week-label {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+
+  .reset-btn {
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: none;
+    border: 0.5px solid var(--border-md);
+    border-radius: var(--radius-sm);
+    padding: 5px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .progress-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--teal-mid);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+  }
+
+  .progress-meta span {
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .split-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 0.75rem 1.25rem 0;
+  }
+
+  .pill {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .pill-purple { background: var(--purple-bg); color: var(--purple-text); }
+  .pill-teal { background: var(--teal-bg); color: var(--teal-text); }
+
+  main { padding: 1rem 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 0.5rem;
+  }
+
+  .action-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1rem 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .card-header:active { opacity: 0.8; }
+
+  .icon-dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  .id-purple { background: var(--purple-bg); color: var(--purple-mid); }
+  .id-teal   { background: var(--teal-bg);   color: var(--teal-mid); }
+  .id-amber  { background: var(--amber-bg);  color: var(--amber-mid); }
+  .id-blue   { background: var(--blue-bg);   color: var(--blue-mid); }
+
+  .card-title-group { flex: 1; min-width: 0; }
+  .card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .card-subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 1px; line-height: 1.4; }
+
+  .card-count-badge {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .card-count-badge.all-done { color: var(--teal-mid); }
+
+  .card-body { padding: 0 1rem 1rem; }
+
+  .card-mini-progress {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+
+  .card-mini-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.2s ease;
+  }
+
+  .fill-purple { background: var(--purple-mid); }
+  .fill-teal   { background: var(--teal-mid); }
+  .fill-amber  { background: var(--amber-mid); }
+  .fill-blue   { background: var(--blue-mid); }
+
+  .tips-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 0.875rem;
+  }
+
+  .tip-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .tip-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .dot-purple { background: var(--purple-mid); }
+  .dot-teal   { background: var(--teal-mid); }
+  .dot-amber  { background: var(--amber-mid); }
+  .dot-blue   { background: var(--blue-mid); }
+
+  .checkboxes-label {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+
+  .checkboxes-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .cb {
+    width: 28px;
+    height: 28px;
+    border: 1.5px solid var(--border-md);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
+
+  .cb:active { transform: scale(0.92); }
+
+  .cb.done {
+    background: var(--teal-mid);
+    border-color: var(--teal-mid);
+  }
+
+  .cb.done::after {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 10px;
+    border: 2px solid white;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  .summary-section {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.25rem;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 0.875rem;
+  }
+
+  .sum-card {
+    text-align: center;
+    padding: 0.6rem 0.25rem;
+    background: var(--bg);
+    border-radius: var(--radius-md);
+  }
+
+  .sum-num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .sum-num.green { color: var(--teal-mid); }
+
+  .sum-lbl {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+
+  .timeline-note {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.5;
+    padding-top: 0.875rem;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .add-home-note {
+    font-size: 11.5px;
+    color: var(--text-tertiary);
+    text-align: center;
+    padding: 0 1.25rem;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 600px) {
+    body { max-width: 540px; margin: 0 auto; }
+    header { border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div>
+      <h1>Weekly job search</h1>
+      <div class="week-label" id="week-label"></div>
+    </div>
+    <button class="reset-btn" onclick="resetWeek()">↺ New week</button>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="main-fill" style="width:0%"></div>
+  </div>
+  <div class="progress-meta">
+    <span id="main-done-text">0 of 29 done</span>
+    <span id="main-pct-text">0%</span>
+  </div>
+</header>
+
+<div class="split-row">
+  <span class="pill pill-purple">70% Instructional Design / L&D</span>
+  <span class="pill pill-teal">30% Communication coaching</span>
+</div>
+
+<main id="main"></main>
+
+<script>
+const ACTIONS = [
+  {
+    id: 'apps',
+    icon: '📄',
+    iconClass: 'id-purple',
+    fillClass: 'fill-purple',
+    dotClass: 'dot-purple',
+    title: '20 targeted applications',
+    subtitle: 'ID/L&D roles (14) + Communication coaching (6)',
+    count: 20,
+    tips: [
+      'Focus on companies using Canvas, Moodle, Articulate, or Rise 360',
+      'Lead with ADDIE/SAM and Kirkpatrick keywords in each application',
+      'Tailor your cover letter to the specific LMS or authoring tool listed',
+      'Track each one with status and follow-up date in a spreadsheet',
+    ]
+  },
+  {
+    id: 'net',
+    icon: '💬',
+    iconClass: 'id-teal',
+    fillClass: 'fill-teal',
+    dotClass: 'dot-teal',
+    title: '5 networking conversations',
+    subtitle: 'USC ALI, UCLA, UC Irvine, CSU DH alumni in corporate training',
+    count: 5,
+    tips: [
+      'Ask about their transition from academia — shared experience opens doors',
+      'Keep it to 20 min: "I\'d love to hear what L&D looks like at your org"',
+      'Follow up within 48 hours with a thank-you and one specific takeaway',
+      'LinkedIn alumni search by company + "learning" or "training" is gold',
+    ]
+  },
+  {
+    id: 'ref',
+    icon: '🤝',
+    iconClass: 'id-amber',
+    fillClass: 'fill-amber',
+    dotClass: 'dot-amber',
+    title: '3 referral requests',
+    subtitle: 'Warm connections at target companies or in L&D hiring circles',
+    count: 3,
+    tips: [
+      'Identify mutual connections on LinkedIn before applying to a company',
+      'Ask specifically: "Would you forward my resume to your HR team?"',
+      'Make it easy — attach your resume and a 3-sentence targeting summary',
+      'Past teacher-training colleagues now in corporate roles are ideal sources',
+    ]
+  },
+  {
+    id: 'li',
+    icon: '✍️',
+    iconClass: 'id-blue',
+    fillClass: 'fill-blue',
+    dotClass: 'dot-blue',
+    title: '1 LinkedIn post',
+    subtitle: 'Learning, adult acquisition, instructional design, or pedagogy',
+    count: 1,
+    tips: [
+      'Topic ideas: UDL in onboarding, Bloom\'s in course design, andragogy vs pedagogy',
+      'Share a real example from your USC or CSU DH experience (anonymized)',
+      'End with a question — algorithm rewards engagement',
+      'Hashtags: #InstructionalDesign #LearningAndDevelopment #AdultLearning',
+    ]
+  },
+];
+
+const STORAGE_KEY = 'olivia_tracker_v2';
+let state = {};
+let expanded = {};
+
+function getWeekLabel() {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const mon = new Date(now.setDate(diff));
+  const sun = new Date(mon); sun.setDate(mon.getDate() + 6);
+  const fmt = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return 'Week of ' + fmt(mon) + ' – ' + fmt(sun);
+}
+
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function load() {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) state = JSON.parse(s);
+  } catch(e) {}
+}
+
+function toggle(actionId, idx) {
+  const key = actionId + '_' + idx;
+  state[key] = !state[key];
+  save();
+  updateCard(actionId);
+  updateSummary();
+}
+
+function toggleExpand(actionId) {
+  expanded[actionId] = !expanded[actionId];
+  const body = document.getElementById('body_' + actionId);
+  body.style.display = expanded[actionId] ? 'block' : 'none';
+}
+
+function getDone(actionId, count) {
+  let d = 0;
+  for (let i = 0; i < count; i++) if (state[actionId + '_' + i]) d++;
+  return d;
+}
+
+function updateCard(actionId) {
+  const a = ACTIONS.find(x => x.id === actionId);
+  const done = getDone(actionId, a.count);
+  const pct = Math.round(done / a.count * 100);
+  const fill = document.getElementById('fill_' + actionId);
+  const badge = document.getElementById('badge_' + actionId);
+  const miniFill = document.getElementById('minifill_' + actionId);
+  if (fill) fill.style.width = pct + '%';
+  if (miniFill) miniFill.style.width = pct + '%';
+  if (badge) {
+    badge.textContent = done + '/' + a.count;
+    badge.className = 'card-count-badge' + (done === a.count ? ' all-done' : '');
+  }
+  document.querySelectorAll('.cb[data-aid="' + actionId + '"]').forEach((cb, i) => {
+    if (state[actionId + '_' + i]) cb.classList.add('done');
+    else cb.classList.remove('done');
+  });
+}
+
+function updateSummary() {
+  const total = ACTIONS.reduce((s, a) => s + a.count, 0);
+  let done = 0;
+  ACTIONS.forEach(a => { done += getDone(a.id, a.count); });
+  const pct = total > 0 ? Math.round(done / total * 100) : 0;
+  document.getElementById('main-fill').style.width = pct + '%';
+  document.getElementById('main-done-text').textContent = done + ' of ' + total + ' done';
+  document.getElementById('main-pct-text').textContent = pct + '%';
+  document.getElementById('sum-done').textContent = done;
+  document.getElementById('sum-total').textContent = total;
+  document.getElementById('sum-pct').textContent = pct + '%';
+}
+
+function resetWeek() {
+  if (!confirm('Start a new week? This clears all checkboxes.')) return;
+  state = {};
+  save();
+  ACTIONS.forEach(a => updateCard(a.id));
+  updateSummary();
+}
+
+function render() {
+  document.getElementById('week-label').textContent = getWeekLabel();
+
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+
+  const eyebrow = document.createElement('div');
+  eyebrow.className = 'section-eyebrow';
+  eyebrow.textContent = 'Core weekly actions — tap to expand';
+  main.appendChild(eyebrow);
+
+  ACTIONS.forEach(a => {
+    const done = getDone(a.id, a.count);
+    const pct = Math.round(done / a.count * 100);
+    const isExpanded = expanded[a.id] !== false;
+    expanded[a.id] = isExpanded;
+
+    const card = document.createElement('div');
+    card.className = 'action-card';
+
+    const cbs = Array.from({length: a.count}, (_, i) => {
+      const isDone = state[a.id + '_' + i] ? 'done' : '';
+      return `<div class="cb ${isDone}" data-aid="${a.id}" data-idx="${i}" role="checkbox" aria-checked="${!!state[a.id+'_'+i]}" tabindex="0" aria-label="Mark item ${i+1} done"></div>`;
+    }).join('');
+
+    const tips = a.tips.map(t => `<li class="tip-item"><span class="tip-dot ${a.dotClass}"></span><span>${t}</span></li>`).join('');
+
+    card.innerHTML = `
+      <div class="card-header" onclick="toggleExpand('${a.id}')" role="button" aria-expanded="${isExpanded}" aria-controls="body_${a.id}">
+        <div class="icon-dot ${a.iconClass}">${a.icon}</div>
+        <div class="card-title-group">
+          <div class="card-title">${a.title}</div>
+          <div class="card-subtitle">${a.subtitle}</div>
+        </div>
+        <div class="card-count-badge ${done === a.count ? 'all-done' : ''}" id="badge_${a.id}">${done}/${a.count}</div>
+      </div>
+      <div class="card-body" id="body_${a.id}" style="display:${isExpanded ? 'block' : 'none'}">
+        <div class="card-mini-progress">
+          <div class="card-mini-fill ${a.fillClass}" id="minifill_${a.id}" style="width:${pct}%"></div>
+        </div>
+        <ul class="tips-list">${tips}</ul>
+        <div class="checkboxes-label">Tap to check off completed items</div>
+        <div class="checkboxes-row" id="fill_row_${a.id}">${cbs}</div>
+      </div>`;
+
+    main.appendChild(card);
+  });
+
+  const summary = document.createElement('div');
+  summary.className = 'summary-section';
+  const total = ACTIONS.reduce((s, a) => s + a.count, 0);
+  let done = 0;
+  ACTIONS.forEach(a => { done += getDone(a.id, a.count); });
+  const pct = total > 0 ? Math.round(done / total * 100) : 0;
+  summary.innerHTML = `
+    <div class="section-eyebrow" style="margin-bottom:0.75rem">This week at a glance</div>
+    <div class="summary-grid">
+      <div class="sum-card"><div class="sum-num green" id="sum-done">${done}</div><div class="sum-lbl">completed</div></div>
+      <div class="sum-card"><div class="sum-num" id="sum-total">${total}</div><div class="sum-lbl">total actions</div></div>
+      <div class="sum-card"><div class="sum-num green" id="sum-pct">${pct}%</div><div class="sum-lbl">progress</div></div>
+    </div>
+    <p class="timeline-note">Consistent effort at this pace → interviews within 30–60 days.</p>`;
+  main.appendChild(summary);
+
+  const note = document.createElement('p');
+  note.className = 'add-home-note';
+  note.textContent = 'Tip: On iPhone, tap Share → "Add to Home Screen." On Android, tap the browser menu → "Add to Home Screen."';
+  main.appendChild(note);
+
+  document.getElementById('main-fill').style.width = pct + '%';
+  document.getElementById('main-done-text').textContent = done + ' of ' + total + ' done';
+  document.getElementById('main-pct-text').textContent = pct + '%';
+
+  document.addEventListener('click', function(e) {
+    const cb = e.target.closest('.cb');
+    if (!cb) return;
+    const aid = cb.dataset.aid;
+    const idx = parseInt(cb.dataset.idx);
+    toggle(aid, idx);
+  });
+}
+
+load();
+render();
+</script>
+</body>
+</html>
