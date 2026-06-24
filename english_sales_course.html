@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English for Sales Professionals</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf8f4;
+    --card: #ffffff;
+    --accent1: #1a3a2a;
+    --accent2: #c8a96e;
+    --text-dark: #1c1c1c;
+    --text-mid: #4a4a4a;
+    --text-light: #888;
+    --tag-bg: #e8f0eb;
+    --border: #e5e0d8;
+    --pill-bg: #f0ece4;
+    --warn-bg: #fff8ed;
+    --warn-border: #f0c060;
+    --warn-text: #7a5000;
+    --info-bg: #e8edf8;
+    --info-border: #b8c4e8;
+    --info-text: #1a3278;
+    --danger-bg: #fdeaea;
+    --danger-border: #f0b8b8;
+    --danger-text: #7a1a1a;
+    --success-bg: #e8f0eb;
+    --success-border: #b8d4c0;
+    --success-text: #1a3a2a;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    padding: 2rem 1.25rem 4rem;
+  }
+
+  .course-wrap { max-width: 720px; margin: 0 auto; }
+
+  /* ── Hero ── */
+  .hero {
+    background: var(--accent1);
+    border-radius: 16px;
+    padding: 2rem 1.75rem 1.75rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(200,169,110,0.15);
+    right: -40px; top: -50px;
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 0.6rem;
+  }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem; font-weight: 700;
+    color: #fff; line-height: 1.25;
+    margin-bottom: 0.8rem; max-width: 480px;
+  }
+  .hero-sub {
+    font-size: 13.5px; color: rgba(255,255,255,0.65);
+    line-height: 1.6; max-width: 440px; margin-bottom: 1.25rem;
+  }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hero-tag {
+    background: rgba(200,169,110,0.18); color: var(--accent2);
+    font-size: 12px; font-weight: 500;
+    padding: 4px 12px; border-radius: 100px;
+    border: 1px solid rgba(200,169,110,0.3);
+  }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--text-light); margin-bottom: 0.75rem;
+  }
+
+  /* ── Progress ── */
+  .progress-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+  }
+  .progress-bar-bg { flex: 1; height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; width: 0%; background: var(--accent2); border-radius: 100px; transition: width 0.6s ease; }
+  .progress-label { font-size: 12px; color: var(--text-mid); white-space: nowrap; }
+
+  /* ── Modules ── */
+  .modules-grid { display: grid; gap: 12px; margin-bottom: 2rem; }
+  .module-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.1rem 1.25rem;
+    cursor: pointer; transition: border-color 0.2s, transform 0.15s;
+  }
+  .module-card:hover { border-color: var(--accent2); transform: translateY(-1px); }
+  .module-card.active { border-color: var(--accent1); background: #f7f9f7; }
+  .module-top { display: flex; align-items: flex-start; gap: 12px; }
+  .module-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0; background: var(--tag-bg);
+  }
+  .module-meta { flex: 1; }
+  .module-title { font-weight: 500; font-size: 14.5px; color: var(--text-dark); margin-bottom: 3px; }
+  .module-desc { font-size: 12.5px; color: var(--text-mid); line-height: 1.5; }
+  .module-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 100px; white-space: nowrap; }
+  .badge-start { background: #fff3cd; color: #7a5c00; border: 1px solid #f0d080; }
+  .badge-vocab { background: #e8f0eb; color: #1a3a2a; border: 1px solid #b8d4c0; }
+  .badge-convo { background: #e8edf8; color: #1a3278; border: 1px solid #b8c4e8; }
+  .badge-adv   { background: #fdeaea; color: #7a1a1a; border: 1px solid #f0b8b8; }
+  .module-expand { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); display: none; }
+  .module-card.active .module-expand { display: block; }
+  .lesson-list { list-style: none; display: grid; gap: 8px; }
+  .lesson-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--text-mid);
+    padding: 8px 10px; border-radius: 8px; background: var(--pill-bg);
+  }
+  .lesson-dot {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid var(--accent1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--accent1); font-weight: 500; flex-shrink: 0;
+  }
+  .cta-row { display: flex; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent1); color: #fff;
+    border: none; padding: 9px 20px; border-radius: 8px;
+    font-size: 13.5px; font-weight: 500; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: opacity 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-sec {
+    background: transparent; color: var(--accent1);
+    border: 1px solid var(--accent1); padding: 9px 20px; border-radius: 8px;
+    font-size: 13.5px; font-weight: 500; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-sec:hover { background: var(--tag-bg); }
+
+  /* ── Vocab spotlight ── */
+  .vocab-spotlight {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.25rem; margin-bottom: 2rem;
+  }
+  .vocab-spotlight-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700;
+    color: var(--text-dark); margin-bottom: 0.75rem;
+  }
+  .vocab-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+  .vocab-chip {
+    background: var(--pill-bg); border: 1px solid var(--border);
+    padding: 5px 14px; border-radius: 100px;
+    font-size: 12.5px; cursor: pointer; color: var(--text-dark);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .vocab-chip.selected { background: var(--accent1); color: #fff; border-color: var(--accent1); }
+  .vocab-def {
+    font-size: 13px; color: var(--text-mid);
+    line-height: 1.6; min-height: 52px;
+    padding: 10px 14px; background: var(--tag-bg);
+    border-radius: 8px; border-left: 3px solid var(--accent2);
+    transition: opacity 0.2s;
+  }
+
+  /* ── Practice dialogues section ── */
+  .practice-section { margin-bottom: 2rem; }
+
+  .dialogue-tabs {
+    display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap;
+  }
+  .dialogue-tab {
+    padding: 7px 16px; border-radius: 8px;
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--card); color: var(--text-mid);
+    transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+  }
+  .dialogue-tab:hover { border-color: var(--accent2); color: var(--text-dark); }
+  .dialogue-tab.active { background: var(--accent1); color: #fff; border-color: var(--accent1); }
+
+  .dialogue-panel { display: none; }
+  .dialogue-panel.active { display: block; }
+
+  .dialogue-scenario {
+    display: flex; gap: 10px; align-items: flex-start;
+    background: var(--pill-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+  }
+  .scenario-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 500; flex-shrink: 0;
+  }
+  .scenario-avatar.easy { background: var(--success-bg); color: var(--success-text); }
+  .scenario-avatar.hard { background: var(--danger-bg); color: var(--danger-text); }
+  .scenario-info { flex: 1; }
+  .scenario-title { font-size: 13px; font-weight: 500; color: var(--text-dark); margin-bottom: 3px; }
+  .scenario-sub { font-size: 12.5px; color: var(--text-mid); line-height: 1.5; }
+  .difficulty-pill {
+    font-size: 11px; font-weight: 500;
+    padding: 3px 10px; border-radius: 100px; white-space: nowrap; align-self: flex-start;
+  }
+  .difficulty-pill.moderate { background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
+  .difficulty-pill.hard { background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); }
+
+  .phase-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-light); margin: 1.25rem 0 0.6rem;
+  }
+
+  .d-line { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+  .d-line.you { flex-direction: row-reverse; }
+
+  .d-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 500; flex-shrink: 0;
+  }
+  .d-avatar.rep { background: var(--success-bg); color: var(--success-text); }
+  .d-avatar.prospect { background: var(--pill-bg); color: var(--text-mid); border: 1px solid var(--border); }
+
+  .d-bubble {
+    max-width: 82%; padding: 10px 14px;
+    border-radius: 12px; font-size: 13.5px; line-height: 1.6;
+    color: var(--text-dark);
+    background: var(--card); border: 1px solid var(--border);
+  }
+  .d-line.you .d-bubble {
+    background: var(--success-bg); border-color: var(--success-border);
+    color: var(--success-text);
+  }
+  .d-bubble.tough {
+    background: var(--danger-bg); border-color: var(--danger-border);
+    color: var(--danger-text);
+  }
+
+  .d-note {
+    font-size: 12px; color: var(--warn-text);
+    background: var(--warn-bg); border-left: 3px solid var(--warn-border);
+    padding: 7px 12px; margin: -4px 0 10px 40px; line-height: 1.55;
+    border-radius: 0;
+  }
+  .d-line.you + .d-note { margin-left: 0; margin-right: 40px; }
+
+  .coach-tag {
+    display: inline-block;
+    background: var(--info-bg); color: var(--info-text);
+    font-size: 11px; font-weight: 500;
+    padding: 1px 8px; border-radius: 100px;
+    margin-left: 6px; vertical-align: middle;
+    cursor: pointer; border: 1px solid var(--info-border);
+    user-select: none;
+  }
+  .coach-box {
+    display: none;
+    font-size: 12.5px; color: var(--text-mid); line-height: 1.6;
+    padding: 10px 14px; margin: 4px 0 10px 0;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .coach-box.open { display: block; }
+
+  .d-divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+</style>
+</head>
+<body>
+<div class="course-wrap">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-eyebrow">Personalized English Program</div>
+    <div class="hero-title">English for Sales Professionals</div>
+    <div class="hero-sub">Designed for B2 Turkish speakers — with a strong focus on sales vocabulary, persuasive language, and confident business communication.</div>
+    <div class="hero-tags">
+      <span class="hero-tag">B2 Level</span>
+      <span class="hero-tag">Vocabulary Focus</span>
+      <span class="hero-tag">Sales &amp; Business</span>
+      <span class="hero-tag">6 Modules</span>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-row">
+    <span class="progress-label">Course progress</span>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <span class="progress-label" id="progressText">0 / 6 modules</span>
+  </div>
+
+  <!-- Modules -->
+  <div class="section-label">Course Modules — click to expand</div>
+  <div class="modules-grid" id="modulesGrid"></div>
+
+  <!-- Vocab spotlight -->
+  <div class="section-label">Sales vocabulary spotlight</div>
+  <div class="vocab-spotlight">
+    <div class="vocab-spotlight-title">Key terms — tap to explore</div>
+    <div class="vocab-chips" id="vocabChips"></div>
+    <div class="vocab-def" id="vocabDef">Select a word above to see its meaning and an example sentence.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PRACTICE DIALOGUES
+  ══════════════════════════════════════════ -->
+  <div class="section-label">Practice dialogues — annotated cold calls</div>
+  <div class="practice-section">
+
+    <div class="dialogue-tabs">
+      <button class="dialogue-tab active" onclick="showDialogue('d1', this)">Call 1 — Moderate prospect</button>
+      <button class="dialogue-tab" onclick="showDialogue('d2', this)">Call 2 — Difficult prospect</button>
+    </div>
+
+    <!-- ── DIALOGUE 1 ── -->
+    <div class="dialogue-panel active" id="d1">
+
+      <div class="dialogue-scenario">
+        <div class="scenario-avatar easy">SR</div>
+        <div class="scenario-info">
+          <div class="scenario-title">Scenario: SaaS software sales — outbound cold call</div>
+          <div class="scenario-sub">You are Serkan, a sales rep at a productivity software company. You're calling Sarah Mitchell, Operations Manager at a mid-sized logistics firm. She wasn't expecting your call.</div>
+        </div>
+        <div class="difficulty-pill moderate">Moderate</div>
+      </div>
+
+      <div class="phase-label">Phase 1 — Opening</div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"Hi, is this Sarah Mitchell?"
+          <span class="coach-tag" onclick="toggleCoach('c1_1')">confirm name</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c1_1">Always confirm the name first — it shows professionalism and avoids the wrong conversation. Say it as a question, not a statement.</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">SM</div>
+        <div class="d-bubble">"Yes, speaking. Who's this?"</div>
+      </div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"Hi Sarah, my name is Serkan — I'm calling from Flowdesk. I know you weren't expecting my call, so I'll keep it brief."
+          <span class="coach-tag" onclick="toggleCoach('c1_2')">disarm opener</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c1_2">"I'll keep it brief" is a powerful disarm — it respects their time and reduces the urge to hang up. Use this phrase every time.</div>
+      <div class="d-note">Turkish tip: avoid "I am disturbing you" — this sounds overly apologetic in English sales. "I know you weren't expecting my call" is the natural equivalent.</div>
+
+      <div class="phase-label">Phase 2 — Hook</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">SM</div>
+        <div class="d-bubble">"Alright... what's it about?"</div>
+      </div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"We work with logistics companies to reduce the time their teams spend on manual reporting — typically saving around four to six hours a week per team. I just wanted to find out if that's even a challenge for you right now."
+          <span class="coach-tag" onclick="toggleCoach('c1_3')">value + question</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c1_3">Lead with a specific benefit, then ask a soft question. Don't pitch your product — pitch the problem you solve. "I just wanted to find out if..." sounds curious, not pushy.</div>
+
+      <div class="phase-label">Phase 3 — Objection</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">SM</div>
+        <div class="d-bubble">"Honestly, we already use a system for that. I'm not sure we're looking to change anything."</div>
+      </div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"That makes total sense — most of the teams I speak to are already using something. Can I ask, are you happy with how it's working, or are there still a few pain points?"
+          <span class="coach-tag" onclick="toggleCoach('c1_4')">reframe</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c1_4">"That makes total sense" validates their objection without agreeing with it. Then you pivot with a question. Never argue — redirect.</div>
+      <div class="d-note">Vocabulary: "pain points" = the problems your customer experiences. Very common in sales English. "A few pain points" sounds softer than "problems."</div>
+
+      <div class="phase-label">Phase 4 — Discovery</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">SM</div>
+        <div class="d-bubble">"Well... the reporting side is okay, but our team still has to export everything manually into Excel. It takes forever."</div>
+      </div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"That's actually exactly what we help with — automating that export process so it just happens in the background. Would it be worth a quick twenty-minute call this week to show you how it works? No commitment, just a look."
+          <span class="coach-tag" onclick="toggleCoach('c1_5')">soft close</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c1_5">"No commitment, just a look" removes pressure and makes it easy to say yes. The goal of a cold call is NOT to sell — it's to book the next conversation.</div>
+
+      <div class="phase-label">Phase 5 — Close</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">SM</div>
+        <div class="d-bubble">"Okay... sure, I could do Thursday afternoon."</div>
+      </div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"Perfect. Thursday afternoon works great. I'll send a calendar invite to your work email — is it sarah.mitchell at the same company domain?"
+          <span class="coach-tag" onclick="toggleCoach('c1_6')">confirm details</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c1_6">Always confirm logistics before hanging up. Repeat back the day and time. Asking for their email keeps you in control of the next step.</div>
+      <div class="d-note">Vocabulary: "calendar invite" and "domain" are standard B2B terms. Practice saying them naturally — Turkish learners often over-stress the second syllable in "domain."</div>
+
+      <hr class="d-divider">
+      <div class="cta-row">
+        <div style="font-size:12.5px;color:var(--text-mid);align-self:center;">Tap the blue tags on any line to reveal coaching notes.</div>
+      </div>
+    </div>
+
+    <!-- ── DIALOGUE 2 ── -->
+    <div class="dialogue-panel" id="d2">
+
+      <div class="dialogue-scenario">
+        <div class="scenario-avatar hard">SR</div>
+        <div class="scenario-info">
+          <div class="scenario-title">Scenario: B2B recruitment software — inbound follow-up call</div>
+          <div class="scenario-sub">You are Serkan, a sales rep at a hiring software company. James Okafor, Head of HR at a manufacturing firm, filled in a contact form two weeks ago but never replied to your follow-up email. He's busy, skeptical, and used to being sold to.</div>
+        </div>
+        <div class="difficulty-pill hard">Hard prospect</div>
+      </div>
+
+      <div class="phase-label">Phase 1 — Opening (cold re-contact)</div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"Hi James, this is Serkan from HireFlow. You filled in a form on our website a couple of weeks ago — I just wanted to make sure it didn't get lost."
+          <span class="coach-tag" onclick="toggleCoach('c2_1')">soft opener</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c2_1">"I just wanted to make sure it didn't get lost" is low-pressure. It implies you're being helpful, not chasing. Much better than "I'm calling to follow up on my email."</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">JO</div>
+        <div class="d-bubble tough">"Oh. Yeah, I saw your email. Honestly I've been slammed. We're probably not the right fit anyway — we already use something."</div>
+      </div>
+      <div class="d-note">Two objections at once — "too busy" AND "already have a solution." Don't try to answer both. Pick one and stay calm.</div>
+
+      <div class="phase-label">Phase 2 — Handling the brush-off</div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"Totally understand — sounds like a hectic period. I'm not going to pretend this is urgent on your end. Can I just ask one quick question before I let you go?"
+          <span class="coach-tag" onclick="toggleCoach('c2_2')">permission ask</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c2_2">"Before I let you go" signals you respect their time and won't talk for 20 minutes. It also makes them curious what the question is. Most people say yes.</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">JO</div>
+        <div class="d-bubble tough">"...Fine. Make it quick."</div>
+      </div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"When you filled in the form — what were you actually trying to solve at the time?"
+          <span class="coach-tag" onclick="toggleCoach('c2_3')">intent question</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c2_3">This is your best question. It goes back to their original intent — before they got busy. "At the time" invites them to remember the problem that made them search for you in the first place.</div>
+
+      <div class="phase-label">Phase 3 — Uncovering the real problem</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">JO</div>
+        <div class="d-bubble">"We were struggling to get decent applicants for our floor supervisors. Our current system is fine for office roles but it's terrible for shift work scheduling and filtering."</div>
+      </div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"That's actually a really common gap — most general HR platforms weren't built with shift-based roles in mind. Has that problem gone away, or is it still there in the background?"
+          <span class="coach-tag" onclick="toggleCoach('c2_4')">reframe + probe</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c2_4">"Still there in the background" acknowledges they've been busy, but plants the idea that the problem hasn't been solved — just deprioritised. This reopens urgency without pressure.</div>
+      <div class="d-note">Vocabulary: "in the background" = a problem that exists but isn't being actively dealt with. Very natural in English business conversation.</div>
+
+      <div class="phase-label">Phase 4 — Budget objection</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">JO</div>
+        <div class="d-bubble tough">"It's still there. But look — budget is tight this quarter. I can't justify a new platform right now."</div>
+      </div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"That's fair — I'm not here to push anything on a tight quarter. Would it make sense to at least see the numbers so you have something ready when budget opens up? Takes thirty minutes."
+          <span class="coach-tag" onclick="toggleCoach('c2_5')">future pacing</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c2_5">"Future pacing" = moving the conversation to a future moment when the obstacle no longer exists. You're not asking them to buy — you're asking them to be ready to buy. This removes pressure completely.</div>
+      <div class="d-note">Turkish tip: avoid "I understand your problem" — in English this can sound patronising. Say "That's fair" or "That makes sense" — shorter and warmer.</div>
+
+      <div class="phase-label">Phase 5 — Soft close</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">JO</div>
+        <div class="d-bubble">"I mean... yeah. If it's just thirty minutes, I suppose I could do next week."</div>
+      </div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"Perfect. I'll find a slot and send it over — Tuesday or Wednesday work better for you?"
+          <span class="coach-tag" onclick="toggleCoach('c2_6')">either/or close</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c2_6">The either/or close offers two specific options instead of asking "when are you free?" — which is easy to ignore. It moves the conversation forward without feeling pushy.</div>
+
+      <div class="d-line">
+        <div class="d-avatar prospect">JO</div>
+        <div class="d-bubble">"Wednesday afternoon is usually better."</div>
+      </div>
+
+      <div class="d-line you">
+        <div class="d-avatar rep">SR</div>
+        <div class="d-bubble">"Wednesday afternoon it is. I'll send a calendar link in the next hour. And James — thanks for giving me the minute. I know you were slammed."
+          <span class="coach-tag" onclick="toggleCoach('c2_7')">graceful exit</span>
+        </div>
+      </div>
+      <div class="coach-box" id="c2_7">Ending by acknowledging their time ("I know you were slammed") leaves a positive impression. It shows self-awareness and respect. Small phrase, big impact on how they remember the call.</div>
+
+      <hr class="d-divider">
+      <div class="cta-row">
+        <div style="font-size:12.5px;color:var(--text-mid);align-self:center;">Tap the blue tags on any line to reveal coaching notes.</div>
+      </div>
+
+    </div>
+  </div><!-- end practice-section -->
+
+</div><!-- end course-wrap -->
+
+<script>
+/* ── Modules data ── */
+const modules = [
+  { icon: '🗣️', title: 'Module 1 — Sales Vocabulary Foundations', desc: 'Master the 150 most-used words in sales: pipeline, prospect, close, pitch, and more.', badge: 'badge-start', badgeText: 'Start here', lessons: ['The sales funnel: every word you need','Cognates & false friends (Turkish vs English)','Flashcard drills: 50 core sales nouns','Pronunciation: stress patterns in business words'] },
+  { icon: '📞', title: 'Module 2 — Cold Calls & First Contact', desc: 'Scripts, openers, and the vocabulary to open doors confidently by phone or email.', badge: 'badge-vocab', badgeText: 'Vocabulary-heavy', lessons: ['Opening lines that work in English','Handling gatekeepers: polite but firm phrases','Turkish-to-English tone traps (too direct / too formal)','Role-play: live cold call simulation'] },
+  { icon: '🤝', title: 'Module 3 — Building Rapport & Small Talk', desc: 'English small talk has its own unwritten rules. Learn to bond with prospects naturally.', badge: 'badge-convo', badgeText: 'Conversation', lessons: ['Small talk vocabulary: sports, weather, news','How to ask good discovery questions','Active listening phrases in English','Cultural differences: UK vs US sales style'] },
+  { icon: '💼', title: 'Module 4 — Presenting & Pitching', desc: 'Structure a compelling pitch in English. Stress the right words. Pause at the right time.', badge: 'badge-vocab', badgeText: 'Vocabulary-heavy', lessons: ['Signpost language: "First, I\'d like to…", "Moving on to…"','Describing benefits vs features — vocabulary drill','Numbers, percentages, and comparisons','Handling interruptions gracefully'] },
+  { icon: '🔄', title: 'Module 5 — Handling Objections', desc: 'Turn "no" into "tell me more." Learn the exact phrases top English-speaking reps use.', badge: 'badge-convo', badgeText: 'Conversation', lessons: ['Objection vocabulary: concern, hesitation, budget','Empathy phrases that don\'t sound robotic','Reframing techniques in English','Written objection-handling: email replies'] },
+  { icon: '✅', title: 'Module 6 — Closing & Follow-up', desc: 'The language of closing: urgency, commitment, and confirming next steps without pressure.', badge: 'badge-adv', badgeText: 'Advanced', lessons: ['Closing phrases: soft, assumptive, direct','Follow-up emails: subject lines and CTA vocabulary','Negotiation vocabulary: discount, terms, timeline','Final assessment: simulated sales call'] }
+];
+
+/* ── Vocab data ── */
+const vocabWords = [
+  { word: 'Pipeline', def: 'All the potential deals a salesperson is currently working on. "I have 12 deals in my pipeline this quarter."' },
+  { word: 'Prospect', def: 'A potential customer who has been identified but not yet contacted. "She\'s a great prospect — already uses similar tools."' },
+  { word: 'Pitch', def: 'A short, persuasive presentation of your product or service. "I\'ve been working on a stronger pitch for SME clients."' },
+  { word: 'Close (v.)', def: 'To successfully complete a sale. "He closed three deals before noon — a new record."' },
+  { word: 'Objection', def: 'A concern or reason a prospect gives for not buying. "Her main objection was the price, so I offered a trial."' },
+  { word: 'Follow-up', def: 'A message or call sent after an initial contact. "Always send a follow-up email within 24 hours."' },
+  { word: 'Commission', def: 'Extra pay earned based on how much you sell. "My commission this month was higher than my base salary."' },
+  { word: 'Quota', def: 'The sales target you must reach in a given period. "I\'m 80% of the way to my quarterly quota."' },
+];
+
+/* ── Module rendering ── */
+let completedModules = new Set();
+
+function renderModules() {
+  const grid = document.getElementById('modulesGrid');
+  grid.innerHTML = '';
+  modules.forEach((m, i) => {
+    const card = document.createElement('div');
+    card.className = 'module-card';
+    card.id = 'mod-' + i;
+    const lessonItems = m.lessons.map((l, j) => `<li class="lesson-item"><span class="lesson-dot">${j+1}</span>${l}</li>`).join('');
+    card.innerHTML = `
+      <div class="module-top">
+        <div class="module-icon">${m.icon}</div>
+        <div class="module-meta">
+          <div class="module-title">${m.title}</div>
+          <div class="module-desc">${m.desc}</div>
+        </div>
+        <span class="module-badge ${m.badge}">${completedModules.has(i) ? '✓ Done' : m.badgeText}</span>
+      </div>
+      <div class="module-expand">
+        <ul class="lesson-list">${lessonItems}</ul>
+        <div class="cta-row">
+          <button class="btn-sec" onclick="markDone(event,${i})">Mark complete</button>
+        </div>
+      </div>`;
+    card.addEventListener('click', (e) => { if (e.target.tagName === 'BUTTON') return; card.classList.toggle('active'); });
+    grid.appendChild(card);
+  });
+}
+
+function markDone(e, i) {
+  e.stopPropagation();
+  completedModules.add(i);
+  renderModules();
+  updateProgress();
+  const card = document.getElementById('mod-' + i);
+  if (card) card.classList.remove('active');
+}
+
+function updateProgress() {
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressText');
+  const pct = Math.round((completedModules.size / modules.length) * 100);
+  fill.style.width = pct + '%';
+  label.textContent = completedModules.size + ' / ' + modules.length + ' modules';
+}
+
+/* ── Vocab rendering ── */
+function renderVocab() {
+  const chipsEl = document.getElementById('vocabChips');
+  chipsEl.innerHTML = '';
+  vocabWords.forEach((v) => {
+    const chip = document.createElement('span');
+    chip.className = 'vocab-chip';
+    chip.textContent = v.word;
+    chip.onclick = () => {
+      document.querySelectorAll('.vocab-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      const def = document.getElementById('vocabDef');
+      def.style.opacity = 0;
+      setTimeout(() => { def.textContent = v.def; def.style.opacity = 1; }, 120);
+    };
+    chipsEl.appendChild(chip);
+  });
+}
+
+/* ── Dialogue tabs ── */
+function showDialogue(id, btn) {
+  document.querySelectorAll('.dialogue-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.dialogue-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ── Coach tags ── */
+function toggleCoach(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+/* ── Init ── */
+renderModules();
+renderVocab();
+setTimeout(updateProgress, 100);
+</script>
+</body>
+</html>
